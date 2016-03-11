@@ -11,6 +11,8 @@ I suggest creating an AsyncTask to download and / or read the file, because whil
 
 See the sample app included in the gitHub repository to get an idea of how to use it.
 
+![Screenshot showing the sample application and the default icons](http://abload.de/img/screenshot_20160311-0o3oyq.png)
+
 ## Limitations
 ICO4A cannot write ICO files, because I did not need it myself. Some routines are already supplied. The best way to create the encoders is to have a look at the [image4j project](https://github.com/imcdonagh/image4j "image4j project") and implement the missing encoder classes.
 
