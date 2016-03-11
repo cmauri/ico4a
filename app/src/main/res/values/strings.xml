@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Ico4aDemo</string>
+    <string name="title_activity_test_icon">ICO4A icon testing activity</string>
+    <string name="uri_to_load_from_hint">Enter valid icon URI</string>
+    <string name="title_load_from_uri">Load from URI</string>
+    <string name="title_load_default_icons">Load default</string>
+</resources>

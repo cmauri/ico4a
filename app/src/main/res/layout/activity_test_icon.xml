@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:picker="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="16px"
+    android:paddingLeft="16px"
+    android:paddingRight="16px"
+    android:paddingTop="16px"
+    tools:context=".activities.TestIconActivity"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:hint="@string/uri_to_load_from_hint"
+            android:ems="10"
+            android:id="@+id/uriToLoadFrom"
+            android:layout_weight="1" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_load_from_uri"
+            android:id="@+id/loadFromUri"
+            android:layout_weight="1" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_load_default_icons"
+            android:id="@+id/loadDefaultIcons"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <com.github.danielnilsson9.colorpickerview.view.ColorPickerView
+        android:id="@+id/iconBackgroundColor"
+        android:layout_width="fill_parent"
+        android:layout_height="400px"
+        picker:alphaChannelVisible="true" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <org.apmem.tools.layouts.FlowLayout
+            android:id="@+id/testLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </org.apmem.tools.layouts.FlowLayout>
+    </ScrollView>
+</LinearLayout>
