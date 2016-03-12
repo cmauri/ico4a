@@ -1,22 +1,37 @@
 # ico4a
-This is a library to decode ICO files into a list of Bitmap-objects - based on image4j (along with a demo app showing off the library functionality).
+This is a library to decode ICO files into a list of Bitmap-objects - based on [image4j project](https://github.com/imcdonagh/image4j "image4j") (along with a demo app showing off the library functionality).
 
 ## Usage
-In order to use the ico4a library, you have to include it in your project's dependencies (currently only by downloading the AAR file and including it as a library).
+### Add dependency to your project and module
+The easiest way to include ico4a in your project, is to include the jcenter repository in your **project's _build.gradle_** and the following line in your **module's _build.gradle_**'s dependencies-section:
+```Gradle
+compile 'divstar:ico4a:v1.0'
+```
+Alternatively you may download the AAR from [ico4a's gitHub releases site](https://github.com/divStar/ico4a/releases), create a new module (chose "import AAR" in the following dialog) and add the dependency to your app's project manually.
 
-After having done so, include the following statement anywhere.
+### Use the ICODecoder.read(InputStream) method
+After having done so, use the following line anywhere to decode an ICO-InputStream into a List of Bitmap-objects:
 ```Java
 List<Bitmap> images = ICODecoder.read(SOME_INPUTSTREAM);
 ```
 
-I suggest creating an AsyncTask to download and / or read the file, because while reading the file is usually a simple task, it may take some time to do so and you would not want to block the UI thread for that long.
+I suggest creating an AsyncTask to download and read the file, because while reading the file is a rather quick task, it still might result in UI thread blocking.
 
 See the sample app included in the gitHub repository to get an idea of how to use it.
 
 ![Screenshot showing the sample application and the default icons](http://abload.de/img/screenshot_20160311-0o3oyq.png)
 
 ## Limitations
-ico4a cannot write ICO files, because I did not need it myself. Some routines are already supplied. The best way to create the encoders is to have a look at the [image4j project](https://github.com/imcdonagh/image4j "image4j project") and implement the missing encoder classes.
+ico4a cannot write ICO files, because I did not need it myself. Some methods for writing an ICO file are already present, others are not. In particular I have avoided coding BMPEncoder and ICOEncoder, which you will find in the [image4j project](https://github.com/imcdonagh/image4j "image4j library"). Thus you will have to implement them yourself if you need them.
+You can however save each of the resulting Bitmap-objects easily using Android's built-in mechanisms. Here is an example:
+```Java
+    File file = new File(dir, "output.png");
+    FileOutputStream fOut = new FileOutputStream(file);
+
+    bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+    fOut.flush();
+    fOut.close();
+```
 
 ## Stability
 ico4a has been tested with various single- and multi-image ICO files. It has been tested to support 1-, 4-, 8-, 24- and 32-bit uncompressed images with and without alpha transparency. In addition 24- and 32-bit PNG-compressed images with and without alpha transparency have been tested. All of them loaded without any problems.
