@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 23
@@ -18,8 +20,91 @@ android {
     }
 }
 
+group = 'divstar.ico4a'
+version = 'v1.0'
+
+Properties properties = new Properties();
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def siteUrl = 'https://github.com/divStar/ico4a'
+def gitUrl = 'https://github.com/divStar/ico4a.git'
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+
+                // Add your description here
+                name 'ico4a is a library, which allows android to read ICO files into a List of Bitmap-objects'
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'GNU General Public License Version 3'
+                        url 'https://www.gnu.org/licenses/gpl.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'divstar'
+                        name 'Igor'
+                        email 'divStar@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apikey')
+
+    configurations = ['archives'] //When uploading configuration files
+    pkg {
+        repo = 'maven'
+        name = 'ico4a'
+        desc = 'ico4a is a library, which allows android to read ICO files into a List of Bitmap-objects'
+        websiteUrl = siteUrl
+        issueTrackerUrl = 'https://github.com/divStar/ico4a/issues'
+        vcsUrl = gitUrl
+        licenses = ['GPL-3.0']
+        labels = ['aar', 'ico4a', 'ico', 'android']
+        publish = true
+        publicDownloadNumbers = true
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    //options.charSet = 'UTF-8'
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
 }
