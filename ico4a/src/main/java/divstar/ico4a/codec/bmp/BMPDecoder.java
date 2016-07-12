@@ -99,13 +99,11 @@ public class BMPDecoder {
      * @throws IOException if an error occurred
      */
     public static InfoHeader readInfoHeader(LittleEndianInputStream lis) throws IOException {
-        InfoHeader infoHeader = new InfoHeader(lis);
-        return infoHeader;
+        return new InfoHeader(lis);
     }
 
     public static InfoHeader readInfoHeader(LittleEndianInputStream lis, int infoSize) throws IOException {
-        InfoHeader infoHeader = new InfoHeader(lis, infoSize);
-        return infoHeader;
+        return new InfoHeader(lis, infoSize);
     }
 
     /**
@@ -243,7 +241,7 @@ public class BMPDecoder {
         int padBits = bitsPerLine - dataBitsPerLine;
         int padBytes = padBits / 8;
 
-        int bytesPerLine = (int) (bitsPerLine / 8);
+        int bytesPerLine = bitsPerLine / 8;
         int[] line = new int[bytesPerLine];
 
         for (int y = infoHeader.iHeight - 1; y >= 0; y--) {
@@ -293,7 +291,7 @@ public class BMPDecoder {
         if (bitsPerLine % 32 != 0) {
             bitsPerLine = (bitsPerLine / 32 + 1) * 32;
         }
-        int bytesPerLine = (int) (bitsPerLine / 8);
+        int bytesPerLine = bitsPerLine / 8;
 
         int[] line = new int[bytesPerLine];
 
@@ -505,8 +503,7 @@ public class BMPDecoder {
      */
     public static BMPImage readExt(InputStream in) throws IOException {
         BMPDecoder d = new BMPDecoder(in);
-        BMPImage ret = new BMPImage(d.getBitmap(), d.getInfoHeader());
-        return ret;
+        return new BMPImage(d.getBitmap(), d.getInfoHeader());
     }
 
     /**

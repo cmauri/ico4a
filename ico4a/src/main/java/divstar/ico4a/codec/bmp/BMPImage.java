@@ -90,7 +90,7 @@ public class BMPImage {
      */
     public int getColourCount() {
         int bpp = infoHeader.sBitCount == 32 ? 24 : infoHeader.sBitCount;
-        return bpp == -1 ? -1 : (int) (1 << bpp);
+        return bpp == -1 ? -1 : 1 << bpp;
     }
 
     /**
