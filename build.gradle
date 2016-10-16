@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-beta2'
+        classpath 'com.android.tools.build:gradle:2.2.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
         //-> the plugin is applied to ico4a directly
@@ -17,8 +17,8 @@ buildscript {
 
 ext {
     versions = [
-            supportLib: "24.2.0",
-            buildTools: "24.0.1",
+            supportLib: "24.2.1",
+            buildTools: "24.0.2",
             code: 1,
             name: "1.0"
     ]
