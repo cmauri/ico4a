@@ -131,7 +131,7 @@ public class ICOImage extends BMPImage {
      */
     public int getColourCount() {
         int bpp = iconEntry.sBitCount == 32 ? 24 : iconEntry.sBitCount;
-        return bpp == -1 ? -1 : (int) (1 << bpp);
+        return bpp == -1 ? -1 : 1 << bpp;
     }
 
     /**

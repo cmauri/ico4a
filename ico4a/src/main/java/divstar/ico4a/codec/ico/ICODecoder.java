@@ -158,7 +158,7 @@ public class ICODecoder {
 
         int i = 0;
         // images list of bitmap structures in BMP/PNG format
-        List<ICOImage> ret = new ArrayList<ICOImage>(sCount);
+        List<ICOImage> ret = new ArrayList<>(sCount);
 
         try {
             for (i = 0; i < sCount; i++) {

@@ -110,21 +110,21 @@ public class IconEntry {
      * A string representation of this <tt>IconEntry</tt> structure.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("width=");
         sb.append(bWidth);
         sb.append(",height=");
         sb.append(bHeight);
         sb.append(",bitCount=");
         sb.append(sBitCount);
-        sb.append(",colorCount=" + bColorCount);
+        sb.append(",colorCount=").append(bColorCount);
         sb.append(",reserved=");
         sb.append(bReserved);
         sb.append(",offset=");
         sb.append(iFileOffset);
         sb.append(",iSizeInBytes=");
         sb.append(iSizeInBytes);
-        sb.append(",splanes=" + sPlanes);
+        sb.append(",splanes=").append(sPlanes);
         return sb.toString();
     }
 }

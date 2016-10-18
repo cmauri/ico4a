@@ -1,5 +1,7 @@
 package divstar.ico4a.io;
 
+import android.support.annotation.NonNull;
+
 import java.io.*;
 
 public class CountingInputStream extends FilterInputStream {
@@ -24,7 +26,7 @@ public class CountingInputStream extends FilterInputStream {
 	}
 	
 	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
+	public int read(@NonNull byte[] b, int off, int len) throws IOException {
 		int r = super.read(b, off, len);
 		if (r > 0) {
 			count += r;

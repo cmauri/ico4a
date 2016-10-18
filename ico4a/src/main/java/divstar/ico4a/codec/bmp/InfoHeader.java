@@ -221,17 +221,17 @@ public class InfoHeader {
      * A string representation of this <tt>IconEntry</tt> structure.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("iSize=");
         sb.append(iSize);
         sb.append("width=");
         sb.append(iWidth);
         sb.append(",height=");
         sb.append(iHeight);
-        sb.append(",splanes=" + sPlanes);
+        sb.append(",splanes=").append(sPlanes);
         sb.append(",bitCount=");
         sb.append(sBitCount);
-        sb.append(",numColors=" + iNumColors);
+        sb.append(",numColors=").append(iNumColors);
         sb.append(",iCompression=");
         sb.append(iCompression);
         sb.append(",iImageSize=");
