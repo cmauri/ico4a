@@ -142,9 +142,9 @@ public class ICODecoder {
         LittleEndianInputStream in = new LittleEndianInputStream(new CountingInputStream(is));
 
         // Reserved 2 byte =0
-        short sReserved = in.readShortLE();
+        in.readShortLE();
         // Type 2 byte =1
-        short sType = in.readShortLE();
+        in.readShortLE();
         // Count 2 byte Number of Icons in this file
         short sCount = in.readShortLE();
 
@@ -199,7 +199,6 @@ public class ICODecoder {
                         // data size = w * h * 4
                         int dataSize = xorHeader.iWidth * xorHeader.iHeight * 4;
                         int skip = size - infoHeaderSize - dataSize;
-                        int skip2 = entries[i].iFileOffset + size - in.getCount();
 
                         if (in.skip(skip, false) < skip && i < sCount - 1) {
                             throw new EOFException("Unexpected end of input");
