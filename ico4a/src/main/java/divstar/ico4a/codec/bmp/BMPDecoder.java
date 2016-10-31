@@ -458,6 +458,7 @@ public class BMPDecoder {
             try {
                 fin.close();
             } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -489,6 +490,7 @@ public class BMPDecoder {
             try {
                 fin.close();
             } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
