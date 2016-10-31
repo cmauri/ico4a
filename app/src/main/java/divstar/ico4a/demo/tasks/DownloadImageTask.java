@@ -23,7 +23,7 @@ public class DownloadImageTask extends AsyncTask<URL, Void, List<Bitmap>> {
     private WeakReference<View> target;
 
     public DownloadImageTask(View target) {
-        this.target = new WeakReference<View>(target);
+        this.target = new WeakReference<>(target);
     }
 
     public static void copyStream(InputStream input, OutputStream output)

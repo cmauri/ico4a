@@ -21,7 +21,7 @@ public class GetResourceImageTask extends AsyncTask<Integer, Void, List<Bitmap>>
 
     public GetResourceImageTask(View target) {
         this.context = target.getContext();
-        this.target = new WeakReference<View>(target);
+        this.target = new WeakReference<>(target);
     }
 
     @Override
