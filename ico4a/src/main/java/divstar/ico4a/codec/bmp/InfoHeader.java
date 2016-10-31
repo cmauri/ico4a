@@ -10,6 +10,7 @@
 package divstar.ico4a.codec.bmp;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import divstar.ico4a.io.LittleEndianInputStream;
 import divstar.ico4a.io.LittleEndianOutputStream;
@@ -221,29 +222,21 @@ public class InfoHeader {
      * A string representation of this <tt>IconEntry</tt> structure.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("iSize=");
-        sb.append(iSize);
-        sb.append("width=");
-        sb.append(iWidth);
-        sb.append(",height=");
-        sb.append(iHeight);
-        sb.append(",splanes=").append(sPlanes);
-        sb.append(",bitCount=");
-        sb.append(sBitCount);
-        sb.append(",numColors=").append(iNumColors);
-        sb.append(",iCompression=");
-        sb.append(iCompression);
-        sb.append(",iImageSize=");
-        sb.append(iImageSize);
-        sb.append(",iXpixelsPerM=");
-        sb.append(iXpixelsPerM);
-        sb.append(",iYpixelsPerM=");
-        sb.append(iYpixelsPerM);
-        sb.append(",iColorsUsed=");
-        sb.append(iColorsUsed);
-        sb.append(",iColorsImportant=");
-        sb.append(iColorsImportant);
-        return sb.toString();
+        return String.format(
+                Locale.US,
+                "iSize=%dwidth=%d,height=%d,splanes=%s,bitCount=%s,numColors=%d,iCompression=%d,iImageSize=%d,iXpixelsPerM=%d,iYpixelsPerM=%d,iColorsUsed=%d,iColorsImportant=%d",
+                iSize,
+                iWidth,
+                iHeight,
+                sPlanes,
+                sBitCount,
+                iNumColors,
+                iCompression,
+                iImageSize,
+                iXpixelsPerM,
+                iYpixelsPerM,
+                iColorsUsed,
+                iColorsImportant
+        );
     }
 }

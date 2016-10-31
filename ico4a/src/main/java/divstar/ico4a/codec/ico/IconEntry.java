@@ -1,6 +1,7 @@
 package divstar.ico4a.codec.ico;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import divstar.ico4a.io.LittleEndianInputStream;
 import divstar.ico4a.io.LittleEndianOutputStream;
@@ -110,21 +111,17 @@ public class IconEntry {
      * A string representation of this <tt>IconEntry</tt> structure.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("width=");
-        sb.append(bWidth);
-        sb.append(",height=");
-        sb.append(bHeight);
-        sb.append(",bitCount=");
-        sb.append(sBitCount);
-        sb.append(",colorCount=").append(bColorCount);
-        sb.append(",reserved=");
-        sb.append(bReserved);
-        sb.append(",offset=");
-        sb.append(iFileOffset);
-        sb.append(",iSizeInBytes=");
-        sb.append(iSizeInBytes);
-        sb.append(",splanes=").append(sPlanes);
-        return sb.toString();
+        return String.format(
+                Locale.US,
+                "width=%d,height=%d,bitCount=%s,colorCount=%d,reserved=%s,offset=%d,iSizeInBytes=%d,splanes=%s",
+                bWidth,
+                bHeight,
+                sBitCount,
+                bColorCount,
+                bReserved,
+                iFileOffset,
+                iSizeInBytes,
+                sPlanes
+        );
     }
 }
