@@ -233,12 +233,10 @@ public class BMPDecoder {
         // the index of the colour for a pixel, which is perfect for use here.
 
         //padding
-        int dataBitsPerLine = infoHeader.iWidth;
-        int bitsPerLine = dataBitsPerLine;
+        int bitsPerLine = infoHeader.iWidth;
         if (bitsPerLine % 32 != 0) {
             bitsPerLine = (bitsPerLine / 32 + 1) * 32;
         }
-        int padBits = bitsPerLine - dataBitsPerLine;
 
         int bytesPerLine = bitsPerLine / 8;
         int[] line = new int[bytesPerLine];
