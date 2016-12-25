@@ -1,5 +1,6 @@
 # ico4a
-This is a library to decode ICO files into a list of Bitmap-objects - based on [image4j project](https://github.com/imcdonagh/image4j "image4j") (along with a demo app showing off the library functionality).
+This is a library to decode ICO files into a list of Bitmap-objects - based on [image4j project](https://github.com/imcdonagh/image4j "image4j") (I took the liberty to use a similar structure, classes and methods, so credits go to the authors of image4j as well!).
+There is a demo android application included, which shows off the library's functionality. This app is not bullet-proofed so take everything with caution.
 
 ## Usage
 ### Add dependency to your project and module
@@ -28,7 +29,7 @@ You can however save each of the resulting Bitmap-objects easily using Android's
     File file = new File(dir, "output.png");
     FileOutputStream fOut = new FileOutputStream(file);
 
-    bmp.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+    bmp.compress(Bitmap.CompressFormat.PNG, 100, fOut);
     fOut.flush();
     fOut.close();
 ```
