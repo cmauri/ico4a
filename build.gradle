@@ -17,7 +17,7 @@ buildscript {
 
 ext {
     versions = [
-            supportLib: "25.1.0",
+            supportLib: "25.0.1",
             buildTools: "25.0.2",
             code: 1,
             name: "1.0"
