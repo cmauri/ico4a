@@ -1,6 +1,5 @@
 package divstar.ico4a.demo.listeners;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,7 +9,6 @@ import org.apmem.tools.layouts.FlowLayout;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import divstar.ico4a.demo.R;
 import divstar.ico4a.demo.tasks.DownloadImageTask;
 import divstar.ico4a.demo.tasks.GetResourceImageTask;
 

@@ -44,13 +44,13 @@ public class BMPDecoder {
         }
 
         //file size [4]
-        int fileSize = lis.readIntLE();
+        lis.readIntLE();
 
         //reserved = 0 [4]
-        int reserved = lis.readIntLE();
+        lis.readIntLE();
 
         //DataOffset [4] file offset to raster data
-        int dataOffset = lis.readIntLE();
+        lis.readIntLE();
     
     /* info header [40] */
 
@@ -117,7 +117,7 @@ public class BMPDecoder {
      * @throws IOException if an error occurs
      */
     public static Bitmap read(InfoHeader infoHeader, LittleEndianInputStream lis) throws IOException {
-        Bitmap img = null;
+        Bitmap img;
 
     /* Color table (palette) */
 
@@ -146,7 +146,7 @@ public class BMPDecoder {
      */
     public static Bitmap read(InfoHeader infoHeader, LittleEndianInputStream lis, ColorEntry[] colorTable) throws IOException {
 
-        Bitmap img = null;
+        Bitmap img;
 
         //1-bit (monochrome) uncompressed
         if (infoHeader.sBitCount == 1 && infoHeader.iCompression == BMPConstants.BI_RGB) {
@@ -233,13 +233,10 @@ public class BMPDecoder {
         // the index of the colour for a pixel, which is perfect for use here.
 
         //padding
-        int dataBitsPerLine = infoHeader.iWidth;
-        int bitsPerLine = dataBitsPerLine;
+        int bitsPerLine = infoHeader.iWidth;
         if (bitsPerLine % 32 != 0) {
             bitsPerLine = (bitsPerLine / 32 + 1) * 32;
         }
-        int padBits = bitsPerLine - dataBitsPerLine;
-        int padBytes = padBits / 8;
 
         int bytesPerLine = bitsPerLine / 8;
         int[] line = new int[bytesPerLine];
@@ -459,6 +456,7 @@ public class BMPDecoder {
             try {
                 fin.close();
             } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -490,6 +488,7 @@ public class BMPDecoder {
             try {
                 fin.close();
             } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

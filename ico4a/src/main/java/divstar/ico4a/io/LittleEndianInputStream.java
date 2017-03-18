@@ -49,7 +49,7 @@ public class LittleEndianInputStream extends java.io.DataInputStream implements 
       throw new EOFException();
     }
 
-    return (short) ((b2 << 8) + (b1 << 0));
+    return (short) ((b2 << 8) + b1);
   }
   
   /**
@@ -67,7 +67,7 @@ public class LittleEndianInputStream extends java.io.DataInputStream implements 
       throw new EOFException();
     }
 
-    return (b4 << 24) + (b3 << 16) + (b2 << 8) + (b1 << 0);
+    return (b4 << 24) + (b3 << 16) + (b2 << 8) + b1;
   }
   
   /**

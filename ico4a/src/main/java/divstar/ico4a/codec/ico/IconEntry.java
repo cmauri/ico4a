@@ -1,9 +1,9 @@
 package divstar.ico4a.codec.ico;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import divstar.ico4a.io.LittleEndianInputStream;
-import divstar.ico4a.io.LittleEndianOutputStream;
 
 /**
  * Represents an <tt>IconEntry</tt> structure, which contains information about an ICO image.
@@ -68,63 +68,20 @@ public class IconEntry {
     }
 
     /**
-     * Creates and <tt>IconEntry</tt> structure with default values.
-     */
-    public IconEntry() {
-        bWidth = 0;
-        bHeight = 0;
-        bColorCount = 0;
-        sPlanes = 1;
-        bReserved = 0;
-        sBitCount = 0;
-        iSizeInBytes = 0;
-        iFileOffset = 0;
-    }
-
-    /**
-     * Writes the <tt>IconEntry</tt> structure to output
-     *
-     * @param out the output
-     * @throws java.io.IOException if an error occurs
-     */
-    public void write(LittleEndianOutputStream out) throws IOException {
-        //Width 	1 byte 	Cursor Width (16, 32 or 64)
-        out.writeByte(bWidth);
-        //Height 	1 byte 	Cursor Height (16, 32 or 64 , most commonly = Width)
-        out.writeByte(bHeight);
-        //ColorCount 	1 byte 	Number of Colors (2,16, 0=256)
-        out.writeByte(bColorCount);
-        //Reserved 	1 byte 	=0
-        out.writeByte(bReserved);
-        //Planes 	2 byte 	=1
-        out.writeShortLE(sPlanes);
-        //BitCount 	2 byte 	bits per pixel (1, 4, 8)
-        out.writeShortLE(sBitCount);
-        //SizeInBytes 	4 byte 	Size of (InfoHeader + ANDbitmap + XORbitmap)
-        out.writeIntLE(iSizeInBytes);
-        //FileOffset 	4 byte 	FilePos, where InfoHeader starts
-        out.writeIntLE(iFileOffset);
-    }
-
-    /**
      * A string representation of this <tt>IconEntry</tt> structure.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("width=");
-        sb.append(bWidth);
-        sb.append(",height=");
-        sb.append(bHeight);
-        sb.append(",bitCount=");
-        sb.append(sBitCount);
-        sb.append(",colorCount=").append(bColorCount);
-        sb.append(",reserved=");
-        sb.append(bReserved);
-        sb.append(",offset=");
-        sb.append(iFileOffset);
-        sb.append(",iSizeInBytes=");
-        sb.append(iSizeInBytes);
-        sb.append(",splanes=").append(sPlanes);
-        return sb.toString();
+        return String.format(
+                Locale.US,
+                "width=%d,height=%d,bitCount=%s,colorCount=%d,reserved=%s,offset=%d,iSizeInBytes=%d,splanes=%s",
+                bWidth,
+                bHeight,
+                sBitCount,
+                bColorCount,
+                bReserved,
+                iFileOffset,
+                iSizeInBytes,
+                sPlanes
+        );
     }
 }

@@ -1,17 +1,8 @@
 package divstar.ico4a.demo.tasks;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.apmem.tools.layouts.FlowLayout;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,7 +23,7 @@ public class DownloadImageTask extends AsyncTask<URL, Void, List<Bitmap>> {
     private WeakReference<View> target;
 
     public DownloadImageTask(View target) {
-        this.target = new WeakReference<View>(target);
+        this.target = new WeakReference<>(target);
     }
 
     public static void copyStream(InputStream input, OutputStream output)

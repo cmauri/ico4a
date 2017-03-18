@@ -10,9 +10,9 @@
 package divstar.ico4a.codec.bmp;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import divstar.ico4a.io.LittleEndianInputStream;
-import divstar.ico4a.io.LittleEndianOutputStream;
 
 /**
  * Represents a bitmap <tt>InfoHeader</tt> structure, which provides header information.
@@ -99,38 +99,6 @@ public class InfoHeader {
     }
 
     /**
-     * Creates an <tt>InfoHeader</tt> with default values.
-     */
-    public InfoHeader() {
-        //Size of InfoHeader structure = 40
-        iSize = 40;
-        //Width
-        iWidth = 0;
-        //Height
-        iHeight = 0;
-        //Planes (=1)
-        sPlanes = 1;
-        //Bit count
-        sBitCount = 0;
-
-        //caculate NumColors
-        iNumColors = 0;
-
-        //Compression
-        iCompression = 0;
-        //Image size - compressed size of image or 0 if Compression = 0
-        iImageSize = 0;
-        //horizontal resolution pixels/meter
-        iXpixelsPerM = 0;
-        //vertical resolution pixels/meter
-        iYpixelsPerM = 0;
-        //Colors used - number of colors actually used
-        iColorsUsed = 0;
-        //Colors important - number of important colors 0 = all
-        iColorsImportant = 0;
-    }
-
-    /**
      * Creates a copy of the source <tt>InfoHeader</tt>.
      *
      * @param source the source to copy
@@ -183,67 +151,24 @@ public class InfoHeader {
     }
 
     /**
-     * Writes the <tt>InfoHeader</tt> structure to output
-     *
-     * @param out the output to which the structure will be written
-     * @throws java.io.IOException if an error occurs
-     */
-    public void write(LittleEndianOutputStream out) throws IOException {
-        //Size of InfoHeader structure = 40
-        out.writeIntLE(iSize);
-        //Width
-        out.writeIntLE(iWidth);
-        //Height
-        out.writeIntLE(iHeight);
-        //Planes (=1)
-        out.writeShortLE(sPlanes);
-        //Bit count
-        out.writeShortLE(sBitCount);
-
-        //caculate NumColors
-        //iNumColors = (int) Math.pow(2, sBitCount);
-
-        //Compression
-        out.writeIntLE(iCompression);
-        //Image size - compressed size of image or 0 if Compression = 0
-        out.writeIntLE(iImageSize);
-        //horizontal resolution pixels/meter
-        out.writeIntLE(iXpixelsPerM);
-        //vertical resolution pixels/meter
-        out.writeIntLE(iYpixelsPerM);
-        //Colors used - number of colors actually used
-        out.writeIntLE(iColorsUsed);
-        //Colors important - number of important colors 0 = all
-        out.writeIntLE(iColorsImportant);
-    }
-
-    /**
      * A string representation of this <tt>IconEntry</tt> structure.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("iSize=");
-        sb.append(iSize);
-        sb.append("width=");
-        sb.append(iWidth);
-        sb.append(",height=");
-        sb.append(iHeight);
-        sb.append(",splanes=").append(sPlanes);
-        sb.append(",bitCount=");
-        sb.append(sBitCount);
-        sb.append(",numColors=").append(iNumColors);
-        sb.append(",iCompression=");
-        sb.append(iCompression);
-        sb.append(",iImageSize=");
-        sb.append(iImageSize);
-        sb.append(",iXpixelsPerM=");
-        sb.append(iXpixelsPerM);
-        sb.append(",iYpixelsPerM=");
-        sb.append(iYpixelsPerM);
-        sb.append(",iColorsUsed=");
-        sb.append(iColorsUsed);
-        sb.append(",iColorsImportant=");
-        sb.append(iColorsImportant);
-        return sb.toString();
+        return String.format(
+                Locale.US,
+                "iSize=%dwidth=%d,height=%d,splanes=%s,bitCount=%s,numColors=%d,iCompression=%d,iImageSize=%d,iXpixelsPerM=%d,iYpixelsPerM=%d,iColorsUsed=%d,iColorsImportant=%d",
+                iSize,
+                iWidth,
+                iHeight,
+                sPlanes,
+                sBitCount,
+                iNumColors,
+                iCompression,
+                iImageSize,
+                iXpixelsPerM,
+                iYpixelsPerM,
+                iColorsUsed,
+                iColorsImportant
+        );
     }
 }

@@ -7,18 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
 
 import org.apmem.tools.layouts.FlowLayout;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import divstar.ico4a.demo.R;
 import divstar.ico4a.demo.listeners.LoadOnClickListener;
-import divstar.ico4a.demo.tasks.DownloadImageTask;
 
 public class TestIconActivity extends AppCompatActivity {
 
