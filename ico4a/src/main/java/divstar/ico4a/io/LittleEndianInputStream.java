@@ -51,7 +51,19 @@ public class LittleEndianInputStream extends java.io.DataInputStream implements 
 
     return (short) ((b2 << 8) + b1);
   }
-  
+
+	/**
+	 * Reads a little-endian <tt>unsigned short</tt> value
+	 * @throws IOException if an error occurs
+	 * @return <tt>unsigned short</tt> value with reversed byte order
+	 */
+	public int readUnsignedShortLE() throws IOException {
+		int i1 = readUnsignedByte();
+		int i2 = readUnsignedByte();
+
+		return (i2 << 8) | i1;
+	}
+
   /**
    * Reads a little-endian <tt>int</tt> value.
    * @throws IOException if an error occurs
