@@ -146,43 +146,32 @@ public class BMPDecoder {
      */
     public static Bitmap read(InfoHeader infoHeader, LittleEndianInputStream lis, ColorEntry[] colorTable) throws IOException {
 
-        Bitmap img;
+        switch(infoHeader.iCompression) {
 
-        //1-bit (monochrome) uncompressed
-        if (infoHeader.sBitCount == 1 && infoHeader.iCompression == BMPConstants.BI_RGB) {
+            case BMPConstants.BI_RGB:
 
-            img = read1(infoHeader, lis, colorTable);
+                switch(infoHeader.sBitCount) {
+                    case 1: return read1(infoHeader, lis, colorTable);
+                    case 4: return read4(infoHeader, lis, colorTable);
+                    case 8: return read8(infoHeader, lis, colorTable);
+                    case 16: return read16(infoHeader, lis);
+                    case 24: return read24(infoHeader, lis);
+                    case 32: return read32(infoHeader, lis);
+                    default: throw new IOException("Unrecognized bitmap format: bit count=" + infoHeader.sBitCount);
+                }
 
+            case BMPConstants.BI_BITFIELDS:
+
+                switch(infoHeader.sBitCount) {
+                    case 16: return read16BitFields(infoHeader, lis);
+                    case 32: return read32BitFields(infoHeader, lis);
+                    default: throw new IOException("Unrecognized bitmap format: bit count=" + infoHeader.sBitCount);
+                }
+
+            default:
+
+                throw new IOException("Unsupported bitmap format: compression=" + infoHeader.iCompression);
         }
-        //4-bit uncompressed
-        else if (infoHeader.sBitCount == 4 && infoHeader.iCompression == BMPConstants.BI_RGB) {
-
-            img = read4(infoHeader, lis, colorTable);
-
-        }
-        //8-bit uncompressed
-        else if (infoHeader.sBitCount == 8 && infoHeader.iCompression == BMPConstants.BI_RGB) {
-
-            img = read8(infoHeader, lis, colorTable);
-
-        }
-        //24-bit uncompressed
-        else if (infoHeader.sBitCount == 24 && infoHeader.iCompression == BMPConstants.BI_RGB) {
-
-            img = read24(infoHeader, lis);
-
-        }
-        //32bit uncompressed
-        else if (infoHeader.sBitCount == 32 && infoHeader.iCompression == BMPConstants.BI_RGB) {
-
-            img = read32(infoHeader, lis);
-
-        } else {
-            throw new IOException("Unrecognized bitmap format: bit count=" + infoHeader.sBitCount + ", compression=" +
-                    infoHeader.iCompression);
-        }
-
-        return img;
     }
 
     /**
@@ -369,6 +358,43 @@ public class BMPDecoder {
     }
 
     /**
+     * Reads 16-bit uncompressed bitmap raster data.
+     *
+     * @param lis        the source input
+     * @param infoHeader the <tt>InfoHeader</tt> structure, which was read using
+     *                   {@link #readInfoHeader(net.sf.image4j.io.LittleEndianInputStream) readInfoHeader()}
+     * @return the decoded image read from the source input
+     * @throws IOException if an error occurs
+     */
+    public static Bitmap read16(InfoHeader infoHeader, LittleEndianInputStream lis) throws IOException {
+
+        if(infoHeader.iCompression != BMPConstants.BI_RGB)
+            throw new IOException("Expected BI_RGB compression but got " + infoHeader.iCompression + ".");
+
+        Bitmap img = Bitmap.createBitmap(infoHeader.iWidth, infoHeader.iHeight, Bitmap.Config.ARGB_8888);
+
+        int rowPadding = (4 - infoHeader.iWidth * 2 % 4) % 4;
+
+        for (int y = infoHeader.iHeight - 1; y >= 0; --y) {
+
+            for (int x = 0; x < infoHeader.iWidth; ++x) {
+
+                int pixel = lis.readUnsignedShortLE();
+
+                int r = Math.round((float) ((pixel & 0b0111110000000000) >> 10) / 31 * 255);
+                int g = Math.round((float) ((pixel & 0b0000001111100000) >> 05) / 31 * 255);
+                int b = Math.round((float) ((pixel & 0b0000000000011111) >> 00) / 31 * 255);
+
+                img.setPixel(x, y, Color.argb(255, r, g, b));
+            }
+
+            lis.skip(rowPadding, true);
+        }
+
+        return img;
+    }
+
+    /**
      * Reads 24-bit uncompressed bitmap raster data.
      *
      * @param lis        the source input
@@ -434,6 +460,135 @@ public class BMPDecoder {
                 int g = lis.readUnsignedByte();
                 int r = lis.readUnsignedByte();
                 int a = lis.readUnsignedByte();
+                img.setPixel(x, y, Color.argb(a, r, g, b));
+            }
+        }
+
+        return img;
+    }
+
+    /**
+     * Reads 16-bit uncompressed bitmap raster data, with a bit mask for each color channel.
+     *
+     * @param lis        the source input
+     * @param infoHeader the <tt>InfoHeader</tt> structure, which was read using
+     *                   {@link #readInfoHeader(net.sf.image4j.io.LittleEndianInputStream) readInfoHeader()} and
+     *                   has {@link InfoHeader#iCompression} set to {@link BMPConstants#BI_BITFIELDS}.
+     * @return the decoded image read from the source input
+     * @throws IOException if an error occurs
+     */
+    public static Bitmap read16BitFields(InfoHeader infoHeader, LittleEndianInputStream lis) throws IOException {
+
+        if(infoHeader.iCompression != BMPConstants.BI_BITFIELDS)
+            throw new IOException("Expected BI_BITFIELDS compression but got " + infoHeader.iCompression + ".");
+
+        Bitmap img = Bitmap.createBitmap(infoHeader.iWidth, infoHeader.iHeight, Bitmap.Config.ARGB_8888);
+
+        // Read masks.
+
+        long rm = lis.readUnsignedIntLE();
+        long gm = lis.readUnsignedIntLE();
+        long bm = lis.readUnsignedIntLE();
+
+        // Offset of mask (at which bit its color channel starts in a pixel).
+
+        int rs = Long.numberOfTrailingZeros(rm);
+        int gs = Long.numberOfTrailingZeros(gm);
+        int bs = Long.numberOfTrailingZeros(bm);
+
+        // Length of mask (the number of bits in its color channel).
+
+        int rl = Long.bitCount(rm);
+        int gl = Long.bitCount(gm);
+        int bl = Long.bitCount(bm);
+
+        // Range of mask (the highest possible number in its color channel).
+
+        int rr = (1 << rl) - 1;
+        int gr = (1 << gl) - 1;
+        int br = (1 << bl) - 1;
+
+        int rowPadding = (4 - infoHeader.iWidth * 2 % 4) % 4;
+
+        for (int y = infoHeader.iHeight - 1; y >= 0; --y) {
+
+            for (int x = 0; x < infoHeader.iWidth; ++x) {
+
+                int pixel = lis.readUnsignedShortLE();
+
+                // Mask and shift the color channel from the pixel and then scale it into 8-bit representation.
+
+                int r = Math.round((float) ((pixel & rm) >> rs) / rr * 255);
+                int g = Math.round((float) ((pixel & gm) >> gs) / gr * 255);
+                int b = Math.round((float) ((pixel & bm) >> bs) / br * 255);
+
+                img.setPixel(x, y, Color.argb(255, r, g, b));
+            }
+
+            lis.skip(rowPadding, true);
+        }
+
+        return img;
+    }
+
+    /**
+     * Reads 32-bit uncompressed bitmap raster data, with transparency and a bit mask for each color channel.
+     *
+     * @param lis        the source input
+     * @param infoHeader the <tt>InfoHeader</tt> structure, which was read using
+     *                   {@link #readInfoHeader(net.sf.image4j.io.LittleEndianInputStream) readInfoHeader()} and
+     *                   has {@link InfoHeader#iCompression} set to {@link BMPConstants#BI_BITFIELDS}.
+     * @return the decoded image read from the source input
+     * @throws IOException if an error occurs
+     */
+    public static Bitmap read32BitFields(InfoHeader infoHeader, LittleEndianInputStream lis) throws IOException {
+
+        if(infoHeader.iCompression != BMPConstants.BI_BITFIELDS)
+            throw new IOException("Expected BI_BITFIELDS compression but got " + infoHeader.iCompression + ".");
+
+        Bitmap img = Bitmap.createBitmap(infoHeader.iWidth, infoHeader.iHeight, Bitmap.Config.ARGB_8888);
+
+        // Read masks.
+
+        long rm = lis.readUnsignedIntLE();
+        long gm = lis.readUnsignedIntLE();
+        long bm = lis.readUnsignedIntLE();
+        long am = ~(rm | gm | bm) & 0xffffffffl;
+
+        // Offset of mask (at which bit its color channel starts in a pixel).
+
+        int rs = Long.numberOfTrailingZeros(rm);
+        int gs = Long.numberOfTrailingZeros(gm);
+        int bs = Long.numberOfTrailingZeros(bm);
+        int as = Long.numberOfTrailingZeros(am);
+
+        // Length of mask (the number of bits in its color channel).
+
+        int rl = Long.bitCount(rm);
+        int gl = Long.bitCount(gm);
+        int bl = Long.bitCount(bm);
+        int al = Long.bitCount(am);
+
+        // Range of mask (the highest possible number in its color channel).
+
+        int rr = (1 << rl) - 1;
+        int gr = (1 << gl) - 1;
+        int br = (1 << bl) - 1;
+        int ar = (1 << al) - 1;
+
+        for (int y = infoHeader.iHeight - 1; y >= 0; --y) {
+
+            for (int x = 0; x < infoHeader.iWidth; ++x) {
+
+                long pixel = lis.readUnsignedIntLE();
+
+                // Mask and shift the color channel from the pixel and then scale it into 8-bit representation.
+
+                int r = Math.round((float) ((pixel & rm) >> rs) / rr * 255);
+                int g = Math.round((float) ((pixel & gm) >> gs) / gr * 255);
+                int b = Math.round((float) ((pixel & bm) >> bs) / br * 255);
+                int a = Math.round((float) ((pixel & am) >> as) / ar * 255);
+
                 img.setPixel(x, y, Color.argb(a, r, g, b));
             }
         }

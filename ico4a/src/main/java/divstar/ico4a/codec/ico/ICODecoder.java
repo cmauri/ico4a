@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import divstar.ico4a.codec.bmp.BMPConstants;
 import divstar.ico4a.codec.bmp.BMPDecoder;
 import divstar.ico4a.codec.bmp.ColorEntry;
 import divstar.ico4a.codec.bmp.InfoHeader;
@@ -181,6 +182,7 @@ public class ICODecoder {
 
                     andHeader.sBitCount = 1;
                     andHeader.iNumColors = 2;
+                    andHeader.iCompression = BMPConstants.BI_RGB;
 
                     // for now, just read all the raster data (img + and)
                     // and store as separate images
